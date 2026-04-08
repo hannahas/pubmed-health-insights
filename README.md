@@ -68,7 +68,7 @@ pip install -r requirements.txt
 
 **2. Add your Anthropic API key**  
 Create a `.env` file in the project root:
-ANTHROPIC_API_KEY=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
+ANTHROPIC_API_KEY=xxxxxxxxx
 
 **3. Fetch abstracts**
 ```bash
