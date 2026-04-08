@@ -117,6 +117,22 @@ python3 scripts/train_classifier.py
 
 ---
 
+## A note on ground truth and model design
+
+This project involves two very different kinds of classifiers, and understanding the distinction is important for interpreting the results honestly.
+
+**Claude (ground truth labeler)** reads the full title and abstract and makes a holistic judgment — the same way a human expert would. It understands sentence structure, context, and nuance. When it labels a paper as "clinical", it has genuinely read and understood the abstract.
+
+**The ML classifier** reduces each abstract to a weighted frequency count of the 500 most informative words (TF-IDF), with no understanding of word order or meaning. It learned that words like `patients`, `blood`, and `lung` correlate with clinical labels — but it is pattern matching, not comprehending.
+
+This means the classifier is not predicting the "true" study type — it is learning to **replicate Claude's labeling behavior from text features alone**. This is a useful and practical outcome: once trained, the classifier can label thousands of new abstracts instantly and cheaply, without an API call for each one.
+
+Label quality was assessed qualitatively by reviewing the top predictive words per class. The fact that these words align closely with domain expectations — `mice`, `cd8`, `epitopes` for basic research; `hla`, `pmhc`, `prediction` for computational — suggests the Claude-generated labels are scientifically coherent and the classifier has learned meaningful signal rather than noise.
+
+A natural next step would be to replace TF-IDF + logistic regression with a fine-tuned language model such as BioBERT, which encodes contextual meaning the way Claude does. This would likely push accuracy well above 80% and close the gap between how the ground truth was generated and how predictions are made.
+
+---
+
 ## Next Steps
 
 - [ ] Add cross-validation for more robust performance estimates
